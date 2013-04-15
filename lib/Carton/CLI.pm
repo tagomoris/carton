@@ -181,7 +181,7 @@ sub cmd_bundle {
     my($self, @args) = @_;
 
     $self->parse_options(\@args, "p|path=s" => sub { $self->carton->{path} = $_[1] })
-        or cmd_help("bundle") and $self->error("Invalid option for 'bundle'\n");
+        or $self->error("Invalid option for 'bundle', see 'carton help bundle'.\n");
 
     my $lock = $self->find_lock;
     my $local_mirror = $self->carton->local_mirror;
@@ -212,7 +212,7 @@ sub cmd_install {
         "deployment!" => \$self->{deployment},
         "cached!"     => \$self->{use_local_mirror},
     )
-        or cmd_help("install") and $self->error("Invalid option for 'install'\n");
+        or $self->error("Invalid option for 'install', see 'carton help install'.\n") and return;
 
     my $lock = $self->find_lock;
     my $local_mirror = $self->carton->local_mirror;
@@ -275,7 +275,7 @@ sub cmd_list {
 
     my $tree_mode;
     $self->parse_options(\@args, "tree!" => \$tree_mode)
-        or cmd_help("list") and $self->error("Invalid option for 'list'\n");
+        or $self->error("Invalid option for 'list', see 'carton help list'.\n") and return;
 
     my $lock = $self->find_lock
         or $self->error("Can't find carton.lock: Run `carton install` to rebuild the lock file.\n");
@@ -301,7 +301,7 @@ sub cmd_check {
         or $self->error("Can't find a build file: nothing to check.\n");
 
     $self->parse_options(\@args, "p|path=s", sub { $self->carton->{path} = $_[1] })
-        or cmd_help("check") and $self->error("Invalid option for 'check'\n");
+        or $self->error("Invalid option for 'check', see 'carton help check'.\n");
 
     my $lock = $self->carton->build_lock;
     my @deps = $self->carton->list_dependencies;
@@ -357,7 +357,7 @@ sub cmd_exec {
     my $system; # for unit testing
     my @include;
     $self->parse_options(\@args, 'I=s@', \@include, "system", \$system)
-        or cmd_help("exec") and $self->error("Invalid option for 'exec'\n");
+        or $self->error("Invalid option for 'exec', see 'carton help exec'.\n") and return;
 
     my $path = $self->carton->{path};
     my $lib  = join ",", @include, "$path/lib/perl5", ".";
